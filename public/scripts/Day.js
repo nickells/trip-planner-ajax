@@ -14,7 +14,7 @@ $(document).ready(function () {
 			.drawButton();
 	}
 
-	//this makes sense
+	//this makes 
 	Day.prototype.buildButton = function () { //creates a day button
 		this.$button = $('<button class="btn btn-circle day-btn"></button>').text(this.number);
 		var self = this;
@@ -71,13 +71,13 @@ $(document).ready(function () {
 					newCurrent = days[index] || days[index - 1];
 				var anId = previousDay.number;
 				ajaxIt('DELETE', '/days/'+anId, {id: anId}, function(resData){
-						console.log(resData);
+						//console.log(resData);
 						console.log("client says you deleted a post")
 					})
 			days.forEach(function (day, idx) {
 				var anId = day.number;
 				ajaxIt('PUT','/days/' + anId, {id: anId, index: idx}, function(){
-						console.log("client says your days are numbered");
+						//console.log("client says your days are numbered");
 					})
 				day.number = idx + 1;
 				day.$button.text(day.number);

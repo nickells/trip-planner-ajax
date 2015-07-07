@@ -8,27 +8,36 @@ var days, currentDay;
 
 $(document).ready(function () {
 	if (all_days.length > 0){
-		console.log(all_days);
-		days = all_days.map(function(mongoDay,index){
-			return new Day(mongoDay.hotel,mongoDay.restuarants,mongoDay.thingsToDo,mongoDay.number)
+		$.ajax({
+			type: "GET",
+			url: '/days',
 		})
-		console.log(days);
-		days[0].$button.addClass('current-day');
-		currentDay = days[0];
+		.done(function(data,done){
+			days = data.map(function(mongoDay,index){
+				var newDay = new Day(mongoDay.hotel,mongoDay.restuarants,mongoDay.thingsToDo,mongoDay.number);
+				currentDay = newDay;
+				if (currentDay.hotel) currentDay.hotel = new Hotel(currentDay.hotel);
+				currentDay.$button.removeClass('current-day');
+				return newDay;
+			})
+			days.forEach(function(day){
+				day.switchTo();
+			})
+			days[0].switchTo();
+		})
 	}
 	else{
-	days = [];
-
-	currentDay = new Day();
-	$.ajax({
-		type: 'POST',
-		url: '/days',
-		data: {day: JSON.stringify(currentDay)},
-		success: function (resData){
-			// console.log(resData);
-			console.log("you made the first day")
-		}
-	})
-	currentDay.$button.addClass('current-day');
+		days = [];
+		currentDay = new Day();
+		$.ajax({
+			type: 'POST',
+			url: '/days',
+			data: {day: JSON.stringify(currentDay)},
+			success: function (resData){
+				// console.log(resData);
+				console.log("you made the first day")
+			}
+		})
+		currentDay.$button.addClass('current-day');
 	}
 });
