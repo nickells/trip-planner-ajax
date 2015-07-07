@@ -1,5 +1,17 @@
 var generateAttraction;
 
+
+//REFACTOR THE AJAX INTO ITS OWN FUNCTION
+	var ajaxIt = function(type, url, data, success){
+		$.ajax({
+					type: type,
+					url: url,
+					data: data,
+					success: success
+		})
+	}
+
+
 $(document).ready(function () {
 	generateAttraction = function (config) {
 		config.$all.find('.add').on('click', function () {

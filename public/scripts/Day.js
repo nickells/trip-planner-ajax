@@ -3,11 +3,12 @@ var Day;
 //each day has its own hotel,restaurant,things
 $(document).ready(function () {
 	//constructor that makes new Days.
-	Day = function () {
-		this.hotel = null;
-		this.restaurants = [];
-		this.thingsToDo = [];
-		this.number = days.push(this);
+	Day = function (hotel,restaurants,thingsToDo,number) {
+
+		this.hotel = hotel || null;
+		this.restaurants = restaurants || [];
+		this.thingsToDo = thingsToDo || [];
+		this.number = number || days.push(this);
 
 		this.buildButton()
 			.drawButton();
@@ -63,21 +64,41 @@ $(document).ready(function () {
 	};
 
 	function deleteCurrentDay () {
-		if (days.length > 1) {
-			var index = days.indexOf(currentDay),
-				previousDay = days.splice(index, 1)[0],
-				newCurrent = days[index] || days[index - 1];
+
+			if (days.length > 1) {
+				var index = days.indexOf(currentDay),
+					previousDay = days.splice(index, 1)[0],
+					newCurrent = days[index] || days[index - 1];
+				var anId = previousDay.number;
+				ajaxIt('DELETE', '/days/'+anId, {id: anId}, function(resData){
+						console.log(resData);
+						console.log("client says you deleted a post")
+					})
 			days.forEach(function (day, idx) {
+				var anId = day.number;
+				ajaxIt('PUT','/days/' + anId, {id: anId, index: idx}, function(){
+						console.log("client says your days are numbered");
+					})
 				day.number = idx + 1;
 				day.$button.text(day.number);
 			});
+
 			newCurrent.switchTo();
 			previousDay.eraseButton();
 		}
 	};
 
 	$('#add-day').on('click', function () {
-		new Day();
+		var thisDay = new Day();
+		$.ajax({
+			type: 'POST',
+			url: '/days',
+			data: {day: JSON.stringify(thisDay)},
+			success: function (resData){
+				// console.log(resData);
+				// console.log("it worked! you're a genius")
+			}
+		})
 	});
 
 	$('#day-title > .remove').on('click', deleteCurrentDay);

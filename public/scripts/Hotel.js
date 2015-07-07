@@ -14,6 +14,10 @@ $(document).ready(function () {
 			.buildItineraryItem()
 			.drawItineraryItem();
 		currentDay.hotel = this;
+		// ajaxIt('POST', '/days/' + currentDay.number + '/hotel', 
+		// 	{id: currentDay.number, hotel: currentDay.hotel}, function(){
+		// 		console.log("hotel posted from client");
+		// 	}) 
 	}
 
 	Hotel.prototype = generateAttraction({

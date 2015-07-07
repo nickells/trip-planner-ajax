@@ -1,8 +1,15 @@
 var router = require('express').Router();
-
 var models = require('../models');
 
-router.get('/',
+router.get('/', 
+
+	//DELETE ME LATER!!!!!!!!!!!!!!!!!!!!!!!!
+	// function (req,res,next) {
+	// 	models.Day.remove({}, function(){
+	// 		next();
+	// 	})
+	// },
+
 	function (req, res, next) {
 		models.Hotel
 			.find({}) //finds all hotels
@@ -28,6 +35,15 @@ router.get('/',
 			.exec(function (err, restaurants) {
 				// attach data to res.locals and then go on
 				res.locals.all_restaurants = restaurants;
+				next();
+			});
+	},
+	function (req,res,next){
+		models.Day
+			.find({})
+			.exec(function(err, days){
+				//send days
+				res.locals.all_days = days;
 				next();
 			});
 	},
